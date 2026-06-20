@@ -1,0 +1,267 @@
+.flights-page {
+  min-height: 100vh;
+  background: #fdf8f0;
+  padding-bottom: 80px;
+}
+
+.flights-header {
+  background: linear-gradient(135deg, #1a1a2e, #2c3e6b);
+  color: white;
+  padding: 24px 20px 20px;
+  text-align: center;
+}
+
+.flights-header h2 {
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.flights-header p {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.flights-tip {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.flights-list {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.flight-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  border-right: 4px solid var(--fcolor);
+  transition: box-shadow 0.2s;
+}
+
+.flight-card.past {
+  opacity: 0.55;
+}
+
+.flight-card-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 14px 14px 14px;
+  cursor: pointer;
+}
+
+.flight-num {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.flight-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.flight-route {
+  font-size: 15px;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-bottom: 2px;
+}
+
+.flight-meta {
+  font-size: 11px;
+  color: #95a5a6;
+  margin-bottom: 2px;
+}
+
+.flight-airline {
+  font-size: 12px;
+  color: #7f8c8d;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.flight-segments-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.seg-chip {
+  font-size: 11px;
+  color: #2c3e50;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 3px 7px;
+  display: inline-block;
+  direction: ltr;
+  text-align: left;
+  font-family: monospace;
+}
+
+.flight-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.checkin-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: #f0e8d8;
+  color: #7f8c8d;
+  white-space: nowrap;
+}
+
+.checkin-badge.open {
+  background: #d5f5e3;
+  color: #1a6b3c;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.expand-arrow {
+  font-size: 12px;
+  color: #bdc3c7;
+}
+
+.flight-details {
+  border-top: 1px solid #f0e8d8;
+  padding: 14px;
+}
+
+.detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.dl {
+  font-size: 11px;
+  color: #95a5a6;
+  font-weight: 600;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+
+.dv {
+  font-size: 13px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.mono {
+  font-family: monospace;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.tickets-section {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.tickets-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5d6d7e;
+  margin-bottom: 8px;
+}
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.ticket-row:last-child {
+  border-bottom: none;
+}
+
+.ticket-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.ticket-num {
+  font-size: 11px;
+  color: #7f8c8d;
+}
+
+.checkin-btn {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: 'Heebo', sans-serif;
+  transition: opacity 0.2s;
+}
+
+.checkin-btn:hover {
+  opacity: 0.85;
+}
+
+.wallet-tip {
+  max-width: 480px;
+  margin: 0 auto 16px;
+  padding: 0 16px;
+  background: white;
+  border-radius: 16px;
+  margin: 0 16px 16px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.wallet-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.wallet-steps {
+  padding-right: 18px;
+  margin: 0;
+}
+
+.wallet-steps li {
+  font-size: 12px;
+  color: #5d6d7e;
+  line-height: 1.7;
+}
