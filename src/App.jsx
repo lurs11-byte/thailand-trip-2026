@@ -9,6 +9,16 @@ import FlightsPage from './components/FlightsPage';
 import BottomNav from './components/BottomNav';
 import './App.css';
 
+function getTodayIndex() {
+  const today = new Date();
+  for (let i = 0; i < days.length; i++) {
+    const [d, m] = days[i].date.split('.').map(Number);
+    const dayDate = new Date(2026, m - 1, d);
+    if (today <= dayDate) return i;
+  }
+  return days.length - 1;
+}
+
 export default function App() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [filter, setFilter] = useState('all');
@@ -40,6 +50,13 @@ export default function App() {
       {tab === 'days' && (
         <>
           <FilterBar active={filter} onChange={setFilter} typeLabels={typeLabels} />
+
+          <div className="today-btn-wrap">
+            <button className="today-btn" onClick={() => setSelectedDay(getTodayIndex())}>
+              📍 מה קורה היום?
+            </button>
+          </div>
+
           <div className="days-grid">
             {filteredDays.map((day) => (
               <DayCard

@@ -1,10 +1,7 @@
 .day-card {
   background: white;
   border-radius: 16px;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  padding: 12px 14px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   border: 2px solid transparent;
@@ -32,109 +29,16 @@
 
 .day-card.today {
   border-color: #d4a017;
-  background: #fffdf5;
-  box-shadow: 0 4px 16px rgba(212, 160, 23, 0.25);
+  border-width: 3px;
+  background: linear-gradient(135deg, #fffdf0, #fff9e6);
+  box-shadow: 0 6px 24px rgba(212, 160, 23, 0.35);
 }
 
 .day-card.past {
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
-.day-card-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  min-width: 44px;
-}
-
-.day-emoji {
-  font-size: 26px;
-  line-height: 1;
-}
-
-.day-num-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.day-date {
-  font-size: 11px;
-  font-weight: 700;
-  color: #5d6d7e;
-}
-
-.day-name {
-  font-size: 10px;
-  color: #95a5a6;
-}
-
-.day-card-center {
-  flex: 1;
-  min-width: 0;
-}
-
-.day-location {
-  font-size: 15px;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.day-hotel {
-  font-size: 12px;
-  color: #7f8c8d;
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.day-events-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.event-dot {
-  font-size: 11px;
-  color: #95a5a6;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.day-card-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  min-width: 52px;
-}
-
-.type-badge {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 10px;
-  white-space: nowrap;
-}
-
-.day-num {
-  font-size: 10px;
-  color: #bdc3c7;
-}
-
-.arrow {
-  font-size: 20px;
-  color: #bdc3c7;
-  line-height: 1;
-}
-
+/* today bar */
 .today-bar {
   background: #d4a017;
   color: white;
@@ -144,41 +48,105 @@
   padding: 4px;
   letter-spacing: 1px;
   border-radius: 12px 12px 0 0;
-  margin: -14px -16px 10px;
+  margin: -12px -14px 10px;
 }
 
-.day-card-main {
+/* ── רמה 1: גיבור ── */
+.card-hero {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
-.day-card-footer {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #f0e8d8;
+.card-big-emoji {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.card-hero-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-location {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a2535;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+.card-meta {
+  font-size: 11px;
+  color: #95a5a6;
+  font-weight: 500;
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.meta-sep {
+  color: #d0cfc9;
+}
+
+.vibe-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 20px;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── רמה 2: הייליטים ── */
+.card-events {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+  margin-bottom: 8px;
+  padding-right: 4px;
 }
 
-.footer-item {
+.card-event-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 6px;
 }
 
-.footer-label {
-  font-size: 11px;
-  color: #bdc3c7;
-  font-weight: 600;
+.card-event-icon {
+  font-size: 13px;
   flex-shrink: 0;
-  min-width: 48px;
 }
 
-.footer-value {
+.card-event-title {
   font-size: 12px;
-  color: #5d6d7e;
-  font-weight: 500;
-  line-height: 1.4;
+  color: #4a5568;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── רמה 3: פוטר ── */
+.card-footer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid #f0e8d8;
+}
+
+.footer-chip {
+  font-size: 11px;
+  color: #7f8c8d;
+  font-weight: 600;
+  background: #f7f5f2;
+  border-radius: 10px;
+  padding: 3px 8px;
 }

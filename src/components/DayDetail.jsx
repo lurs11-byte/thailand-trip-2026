@@ -9,6 +9,23 @@ const tagConfig = {
   dontmiss:  { emoji: '🌅', label: 'אל תפספסו',    color: '#27ae60', bg: '#eafaf1' },
 };
 
+const photoOwners = ['ישראל 👨', 'רינת 👩', 'גל 🧑', 'רועי 👦', 'אורי 🧒'];
+
+function detectLinkType(url) {
+  if (!url) return 'info';
+  if (url.includes('maps.google') || url.includes('goo.gl/maps') || url.includes('waze')) return 'maps';
+  if (url.includes('youtube') || url.includes('youtu.be')) return 'video';
+  if (url.includes('booking.com')) return 'hotel';
+  return 'info';
+}
+
+const linkConfig = {
+  maps:  { icon: '📍', label: 'פתח במפות' },
+  video: { icon: '🎥', label: 'סרטון' },
+  hotel: { icon: '🏨', label: 'אתר המלון' },
+  info:  { icon: '🌐', label: 'מידע נוסף' },
+};
+
 function TagBlock({ tag, tagText }) {
   const cfg = tagConfig[tag];
   if (!cfg) return null;
@@ -25,16 +42,19 @@ function TagBlock({ tag, tagText }) {
 
 export default function DayDetail({ day, onBack, onPrev, onNext }) {
   const [photoMemory, setPhotoMemory] = useState('');
-  const storageKey = `photo_${day.date}`;
+  const [dayMoment, setDayMoment] = useState('');
+  const photoKey = `photo_${day.date}`;
+  const momentKey = `moment_${day.date}`;
 
   useEffect(() => {
-    setPhotoMemory(localStorage.getItem(storageKey) || '');
+    setPhotoMemory(localStorage.getItem(photoKey) || '');
+    setDayMoment(localStorage.getItem(momentKey) || '');
   }, [day.date]);
 
-  const saveMemory = (val) => {
-    setPhotoMemory(val);
-    localStorage.setItem(storageKey, val);
-  };
+  const savePhoto = (val) => { setPhotoMemory(val); localStorage.setItem(photoKey, val); };
+  const saveMoment = (val) => { setDayMoment(val); localStorage.setItem(momentKey, val); };
+
+  const photoOwner = photoOwners[(day.dayNum - 1) % 5];
 
   return (
     <div className="detail-page fade-in">
@@ -66,7 +86,19 @@ export default function DayDetail({ day, onBack, onPrev, onNext }) {
           </div>
         )}
 
-        {/* הערה כללית */}
+        {/* חובה לזכור */}
+        {day.mustRemember?.length > 0 && (
+          <div className="must-remember">
+            <div className="must-remember-title">🎒 חובה לזכור היום</div>
+            <ul className="must-remember-list">
+              {day.mustRemember.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* הערה */}
         {day.note && (
           <div className="detail-note">
             <span className="note-icon">💬</span>
@@ -84,8 +116,8 @@ export default function DayDetail({ day, onBack, onPrev, onNext }) {
                 <div className="hotel-confirmation">אישור: <strong>{day.hotel.confirmation}</strong></div>
               )}
               {day.hotel.link && (
-                <a className="hotel-link" href={day.hotel.link} target="_blank" rel="noreferrer">
-                  פרטי המלון ↗
+                <a className="smart-link" href={day.hotel.link} target="_blank" rel="noreferrer">
+                  🏨 אתר המלון ↗
                 </a>
               )}
             </div>
@@ -97,33 +129,28 @@ export default function DayDetail({ day, onBack, onPrev, onNext }) {
           <section className="detail-section">
             <h3 className="section-title">📋 לו״ז</h3>
             <div className="timeline">
-              {day.events.map((event, i) => (
-                <div key={i} className="timeline-item">
-                  <div className="timeline-icon">{event.icon}</div>
-                  <div className="timeline-content">
-                    {event.time && <div className="timeline-time">{event.time}</div>}
-                    <div className="timeline-title">{event.title}</div>
-                    {event.subtitle && <div className="timeline-subtitle">{event.subtitle}</div>}
-
-                    {/* למה זה מיוחד */}
-                    {event.highlight && (
-                      <div className="event-highlight">{event.highlight}</div>
-                    )}
-
-                    {/* תג */}
-                    {event.tag && event.tagText && (
-                      <TagBlock tag={event.tag} tagText={event.tagText} />
-                    )}
-
-                    {event.link && (
-                      <a className="event-link" href={event.link} target="_blank" rel="noreferrer">
-                        צפו בסרטון / פרטים ↗
-                      </a>
-                    )}
+              {day.events.map((event, i) => {
+                const linkType = detectLinkType(event.link);
+                const linkCfg = linkConfig[linkType];
+                return (
+                  <div key={i} className="timeline-item">
+                    <div className="timeline-icon">{event.icon}</div>
+                    <div className="timeline-content">
+                      {event.time && <div className="timeline-time">{event.time}</div>}
+                      <div className="timeline-title">{event.title}</div>
+                      {event.subtitle && <div className="timeline-subtitle">{event.subtitle}</div>}
+                      {event.highlight && <div className="event-highlight">{event.highlight}</div>}
+                      {event.tag && event.tagText && <TagBlock tag={event.tag} tagText={event.tagText} />}
+                      {event.link && (
+                        <a className="smart-link" href={event.link} target="_blank" rel="noreferrer">
+                          {linkCfg.icon} {linkCfg.label} ↗
+                        </a>
+                      )}
+                    </div>
+                    {i < day.events.length - 1 && <div className="timeline-line" />}
                   </div>
-                  {i < day.events.length - 1 && <div className="timeline-line" />}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}
@@ -141,27 +168,36 @@ export default function DayDetail({ day, onBack, onPrev, onNext }) {
         {/* תמונת היום */}
         <section className="detail-section photo-day-section">
           <h3 className="section-title">📸 תמונת היום</h3>
-          <p className="photo-day-desc">
-            בחרו תמונה אחת שמייצגת את היום הזה — בסוף הטיול יש לכם אלבום של 17 רגעים.
-          </p>
+          <div className="photo-owner-badge">אחראי היום: <strong>{photoOwner}</strong></div>
+          <p className="photo-day-desc">תמונה אחת שמייצגת את היום — בסוף הטיול אלבום של 17 רגעים.</p>
           <textarea
             className="photo-memory-input"
-            placeholder="הכניסו קישור לתמונה, או כתבו כאן את הרגע שתרצו לזכור מהיום הזה..."
+            placeholder="קישור לתמונה, או כתבו מה תרצו לזכור..."
             value={photoMemory}
-            onChange={e => saveMemory(e.target.value)}
-            rows={3}
+            onChange={e => savePhoto(e.target.value)}
+            rows={2}
           />
           {photoMemory && photoMemory.startsWith('http') && (
-            <img
-              className="photo-preview"
-              src={photoMemory}
-              alt="תמונת היום"
-              onError={e => e.target.style.display = 'none'}
-            />
+            <img className="photo-preview" src={photoMemory} alt="תמונת היום"
+              onError={e => e.target.style.display = 'none'} />
           )}
           {photoMemory && !photoMemory.startsWith('http') && (
             <div className="memory-saved">✅ נשמר</div>
           )}
+        </section>
+
+        {/* רגע היום */}
+        <section className="detail-section moment-section">
+          <h3 className="section-title">💬 רגע היום</h3>
+          <p className="moment-desc">משפט אחד — הרגע הכי בלתי נשכח מהיום.</p>
+          <textarea
+            className="photo-memory-input"
+            placeholder={`"אורי קפץ ראשון למים" • "השקיעה הייתה מטורפת" • "אבא לא הלך לאיבוד"`}
+            value={dayMoment}
+            onChange={e => saveMoment(e.target.value)}
+            rows={2}
+          />
+          {dayMoment && <div className="memory-saved">✅ נשמר</div>}
         </section>
 
       </div>

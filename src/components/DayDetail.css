@@ -416,6 +416,77 @@
   font-weight: 600;
 }
 
+/* חובה לזכור */
+.must-remember {
+  background: linear-gradient(135deg, #fff8e1, #fef9e7);
+  border: 1.5px solid #f0c030;
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.must-remember-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #7a5a0a;
+  margin-bottom: 10px;
+}
+
+.must-remember-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.must-remember-list li {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  padding-right: 6px;
+}
+
+/* קישורים חכמים */
+.smart-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: #f0f4ff;
+  border: 1px solid #d0d8f0;
+  color: #2980b9;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* רגע היום */
+.moment-section {
+  background: #f0faf5;
+  border: 1.5px solid #a9dfbf;
+}
+
+.moment-desc {
+  font-size: 13px;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* אחראי תמונה */
+.photo-owner-badge {
+  display: inline-block;
+  background: #1a6b3c;
+  color: white;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
 .timeline-line {
   position: absolute;
   right: 27px;

@@ -6,6 +6,32 @@
   align-items: stretch;
 }
 
+.today-btn-wrap {
+  padding: 12px 16px 4px;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.today-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #1a6b3c, #2d8a52);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(26, 107, 60, 0.35);
+  transition: all 0.2s;
+}
+
+.today-btn:active {
+  transform: scale(0.98);
+}
+
 .days-grid {
   display: grid;
   grid-template-columns: 1fr;
