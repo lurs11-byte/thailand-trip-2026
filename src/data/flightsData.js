@@ -102,7 +102,7 @@ export const flights = [
     airline: 'Etihad Airways',
     segments: [
       { from: 'BKK', to: 'AUH', flight: 'EY405', dep: '15:55', arr: '19:10', duration: '6:15' },
-      { from: 'AUH', to: 'TLV', flight: 'EY599', dep: '21:50', arr: '00:15+1', duration: '3:25' },
+      { from: 'AUH', to: 'TLV', flight: 'EY599', dep: '20:40', arr: '23:05', duration: '3:25' },
     ],
     confirmation: '966EDT',
     pnr: '966EDT',
