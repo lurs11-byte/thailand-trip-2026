@@ -1,14 +1,40 @@
 import { useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { flights } from '../data/flightsData';
 import './FlightsPage.css';
 
+const FAMILY = ['ישראל', 'רינת', 'גל', 'רועי', 'אורי'];
+
 export default function FlightsPage() {
   const [expanded, setExpanded] = useState(null);
+  const [qrModal, setQrModal] = useState(null); // { name, code, route }
 
   const toggle = (id) => setExpanded(expanded === id ? null : id);
 
+  const openQr = (flight, person) => {
+    const ticket = flight.tickets?.find(t => t.name === person);
+    const code = ticket ? ticket.number : (flight.pnr || flight.confirmation);
+    setQrModal({ name: person, code, route: flight.route, airline: flight.airline, date: flight.date });
+  };
+
   return (
     <div className="flights-page">
+      {qrModal && (
+        <div className="qr-overlay" onClick={() => setQrModal(null)}>
+          <div className="qr-modal" onClick={e => e.stopPropagation()}>
+            <button className="qr-close" onClick={() => setQrModal(null)}>✕</button>
+            <div className="qr-modal-name">{qrModal.name}</div>
+            <div className="qr-modal-route">{qrModal.route}</div>
+            <div className="qr-modal-date">{qrModal.date} · {qrModal.airline}</div>
+            <div className="qr-modal-code-box">
+              <QRCodeSVG value={qrModal.code} size={220} level="M" />
+            </div>
+            <div className="qr-modal-code">{qrModal.code}</div>
+            <div className="qr-modal-hint">הציגו בדלפק הצ'ק-אין</div>
+          </div>
+        </div>
+      )}
+
       <div className="flights-header">
         <h2>✈️ טיסות</h2>
         <p>5 טיסות • 3 חברות תעופה</p>
@@ -91,6 +117,22 @@ export default function FlightsPage() {
                       ))}
                     </div>
                   )}
+
+                  <div className="pax-qr-section">
+                    <div className="pax-qr-title">🎫 כרטיס לסריקה — בחרו נוסע</div>
+                    <div className="pax-qr-row">
+                      {FAMILY.map(name => (
+                        <button
+                          key={name}
+                          className="pax-qr-btn"
+                          style={{ borderColor: f.color, color: f.color }}
+                          onClick={() => openQr(f, name)}
+                        >
+                          {name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
                   <a
                     className="checkin-btn"
