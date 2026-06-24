@@ -13,8 +13,9 @@ export default function FlightsPage() {
 
   const openQr = (flight, person) => {
     const ticket = flight.tickets?.find(t => t.name === person);
-    const code = ticket ? ticket.number : (flight.pnr || flight.confirmation);
-    setQrModal({ name: person, code, route: flight.route, airline: flight.airline, date: flight.date });
+    const code = (ticket?.number) || (flight.pnr || flight.confirmation);
+    const isFallback = !ticket?.number;
+    setQrModal({ name: person, code, route: flight.route, airline: flight.airline, date: flight.date, isFallback });
   };
 
   return (
@@ -30,7 +31,10 @@ export default function FlightsPage() {
               <QRCodeSVG value={qrModal.code} size={220} level="M" />
             </div>
             <div className="qr-modal-code">{qrModal.code}</div>
-            <div className="qr-modal-hint">הציגו בדלפק הצ'ק-אין</div>
+            {qrModal.isFallback
+              ? <div className="qr-modal-hint" style={{color:'#e67e22'}}>קוד הזמנה משפחתי — מספר אישי חסר</div>
+              : <div className="qr-modal-hint">הציגו בדלפק הצ'ק-אין</div>
+            }
           </div>
         </div>
       )}
