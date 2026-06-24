@@ -110,8 +110,11 @@ export const flights = [
     baggage: '25 ק"ג מטען + 7 ק"ג יד',
     checkinOpens: '13.7.2026',
     tickets: [
-      { name: 'ישראל', number: '607-9480367034' },
-      { name: 'רינת', number: '607-9480367036' },
+      { name: 'ישראל', number: '607-9480367036' },
+      { name: 'רינת', number: '607-9480367034' },
+      { name: 'גל', number: null },
+      { name: 'רועי', number: null },
+      { name: 'אורי', number: null },
     ],
     airlineUrl: 'https://www.etihad.com/en/manage/booking',
     emoji: '🏠',
