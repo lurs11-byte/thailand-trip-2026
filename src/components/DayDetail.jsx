@@ -13,7 +13,7 @@ const tagConfig = {
 
 const photoOwners = ['ישראל 👨', 'רינת 👩', 'גל 🧑', 'רועי 👦', 'אורי 🧒'];
 
-function resizeImage(file, maxWidth = 800, quality = 0.75) {
+function resizeImage(file, maxWidth = 1200, quality = 0.85) {
   return new Promise((resolve) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
