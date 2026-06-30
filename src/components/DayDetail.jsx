@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { db } from '../firebase';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import './DayDetail.css';
 
 const tagConfig = {
@@ -10,6 +12,23 @@ const tagConfig = {
 };
 
 const photoOwners = ['ישראל 👨', 'רינת 👩', 'גל 🧑', 'רועי 👦', 'אורי 🧒'];
+
+function resizeImage(file, maxWidth = 800, quality = 0.75) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, maxWidth / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = url;
+  });
+}
 
 function detectLinkType(url) {
   if (!url) return 'info';
@@ -40,18 +59,67 @@ function TagBlock({ tag, tagText }) {
   );
 }
 
+async function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    await Notification.requestPermission();
+  }
+}
+
+function showNotification(title, body, imageUrl) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '/pwa-192x192.png', image: imageUrl });
+  }
+}
+
 export default function DayDetail({ day, onBack, onPrev, onNext }) {
   const [photoMemory, setPhotoMemory] = useState('');
+  const [captions, setCaptions] = useState({});
   const [dayMoment, setDayMoment] = useState('');
-  const photoKey = `photo_${day.date}`;
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
   const momentKey = `moment_${day.date}`;
+  const docRef = doc(db, 'days', day.date);
 
   useEffect(() => {
-    setPhotoMemory(localStorage.getItem(photoKey) || '');
+    requestNotificationPermission();
     setDayMoment(localStorage.getItem(momentKey) || '');
+
+    const unsub = onSnapshot(docRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.photo) setPhotoMemory(data.photo);
+        if (data.captions) setCaptions(data.captions);
+      }
+    });
+    return unsub;
   }, [day.date]);
 
-  const savePhoto = (val) => { setPhotoMemory(val); localStorage.setItem(photoKey, val); };
+  const saveCaption = async (member, text) => {
+    setCaptions(prev => ({ ...prev, [member]: text }));
+    await setDoc(docRef, { captions: { [member]: text } }, { merge: true });
+  };
+
+  const savePhoto = async (base64, uploader) => {
+    setPhotoMemory(base64);
+    await setDoc(docRef, { photo: base64, uploadedBy: uploader, updatedAt: new Date().toISOString() }, { merge: true });
+    showNotification(
+      `📸 תמונת היום עודכנה — ${day.date}`,
+      `${uploader} העלה/ה תמונה ליום ${day.location}`,
+      base64.startsWith('data:') ? undefined : base64
+    );
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const reader = new FileReader();
+    resizeImage(file).then(async (base64) => {
+      await savePhoto(base64, photoOwner);
+      setUploading(false);
+    });
+  };
+
   const saveMoment = (val) => { setDayMoment(val); localStorage.setItem(momentKey, val); };
 
   const photoOwner = photoOwners[(day.dayNum - 1) % 5];
@@ -170,19 +238,44 @@ export default function DayDetail({ day, onBack, onPrev, onNext }) {
           <h3 className="section-title">📸 תמונת היום</h3>
           <div className="photo-owner-badge">אחראי היום: <strong>{photoOwner}</strong></div>
           <p className="photo-day-desc">תמונה אחת שמייצגת את היום — בסוף הטיול אלבום של 17 רגעים.</p>
-          <textarea
-            className="photo-memory-input"
-            placeholder="קישור לתמונה, או כתבו מה תרצו לזכור..."
-            value={photoMemory}
-            onChange={e => savePhoto(e.target.value)}
-            rows={2}
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
           />
-          {photoMemory && photoMemory.startsWith('http') && (
+          <button
+            className="upload-photo-btn"
+            onClick={() => fileInputRef.current.click()}
+            disabled={uploading}
+          >
+            {uploading ? '⏳ שומר...' : photoMemory ? '🔄 החלף תמונה' : '📷 העלה תמונה מהגלריה'}
+          </button>
+
+          {photoMemory && (
             <img className="photo-preview" src={photoMemory} alt="תמונת היום"
               onError={e => e.target.style.display = 'none'} />
           )}
-          {photoMemory && !photoMemory.startsWith('http') && (
-            <div className="memory-saved">✅ נשמר</div>
+          {photoMemory && <div className="memory-saved">✅ נשמר ומסונכרן לכולם</div>}
+
+          {photoMemory && (
+            <div className="captions-section">
+              <div className="captions-title">✍️ כותרות המשפחה</div>
+              {photoOwners.map(member => (
+                <div key={member} className="caption-row">
+                  <span className="caption-member">{member}</span>
+                  <input
+                    className="caption-input"
+                    placeholder="כותרת לתמונה..."
+                    value={captions[member] || ''}
+                    onChange={e => saveCaption(member, e.target.value)}
+                    dir="rtl"
+                  />
+                </div>
+              ))}
+            </div>
           )}
         </section>
 

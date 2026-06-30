@@ -511,3 +511,69 @@
   font-weight: 600;
   color: #1a6b3c;
 }
+
+.upload-photo-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 12px;
+  direction: rtl;
+  box-shadow: 0 3px 10px rgba(243, 156, 18, 0.3);
+}
+
+.upload-photo-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.captions-section {
+  margin-top: 16px;
+  background: #fffdf7;
+  border: 1px solid #f0e8d8;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.captions-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #7d5a2f;
+  margin-bottom: 10px;
+}
+
+.caption-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.caption-member {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 70px;
+  text-align: right;
+}
+
+.caption-input {
+  flex: 1;
+  border: 1px solid #e0d5c5;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  background: white;
+  font-family: inherit;
+}
+
+.caption-input:focus {
+  outline: none;
+  border-color: #f39c12;
+}
